@@ -1,4 +1,4 @@
-import {createStore,combineReducers, configureStore,compose} from '@reduxjs/toolkit';
+import {combineReducers, configureStore,compose} from '@reduxjs/toolkit';
 import  { userSlice } from '../redux/reducer';
 import globalReducer from '../redux/reducer'
 import userReducer from '../redux/reducer'

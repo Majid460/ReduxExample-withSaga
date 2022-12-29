@@ -1,17 +1,63 @@
 import React,{useEffect,useState} from "react";
-import {Text,View,TextInput,StyleSheet, TouchableOpacity} from 'react-native';
+import {Text,View,TextInput,StyleSheet, TouchableOpacity,ActivityIndicator} from 'react-native';
 import { useDispatch,useSelector } from "react-redux";
-import { getUserData } from "../../redux/reducer";
+import { getUserData ,setBadge} from "../../redux/reducer";
+import { useInterval } from "react-interval-hook";
 const UserData=({navigation})=>{
     const [name,setName]=useState("");
     const [age,setAge]=useState(0);
+    const {badge}=useSelector((state)=>state.user)
+    var number=badge.badgeCount
+    const [badgeCount,setBadgeC]=useState(number)
+    const [visible,setVisible]=useState(false);
     const dispatch=useDispatch();
+   
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener('focus', () => {
+            if(number===0)
+            {
+               setBadgeC(0);
+               console.log("Badge State::: "+ badgeCount)
+            }
+          });
+     return unsubscribe;
+    },[])
     const onButtonPress=()=>{
-     dispatch(getUserData({
-        name:name,
-        age:age
-     }))
+        setVisible(true);
+        if(name.length==0 || age==0)
+        {
+            alert("No empty field is required")
+        }
+        else if(name.length==0 && age==0)
+        {
+            alert("No empty field is required")
+        }
+        else if(name.length!=0 && age!=0)
+        {
+            setBadgeC(badgeCount+1);
+            console.log("State Badge Count => "+ badgeCount)
+            dispatch(setBadge({badgeCount:badgeCount}))
+            dispatch(getUserData({
+                name:name,
+                age:age
+             }))
+        }
+    
     }
+    const { stop } = useInterval(
+        () => {
+            if(visible==true)
+            {
+              setVisible(false)
+            }
+        },
+        3000,
+        {
+          autoStart: true,
+          immediate: false,
+          selfCorrecting: false,
+        }
+      );
     return(
    <View style={styles.container}>
     <TouchableOpacity style={styles.button1} onPress={()=>{navigation.navigate('View User ')}}>
@@ -33,9 +79,12 @@ const UserData=({navigation})=>{
     setAge(value)}}
     />
     </View>
-    <TouchableOpacity style={styles.button} onPress={()=>{onButtonPress()}}>
+    <TouchableOpacity style={styles.button} onPress={()=>{onButtonPress()}} disabled={name.length==0 && age==0 || name.length==0 || age==0} >
         <Text style={styles.heading}>Save</Text>
     </TouchableOpacity>
+    <View style={{flex:1,width:20,height:20,justifyContent:'space-between',alignSelf:'center',marginTop:10}}>
+       <ActivityIndicator animating={visible} size="large" color="#0000ff" />
+       </View>
    </View>
     );
 }

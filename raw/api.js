@@ -79,3 +79,15 @@ export const getUserByAge=async (age)=>{
         console.log(error);
     }
 }      
+export const deleteByName=async (name)=>{
+    try {  
+          const response=await fetch(`${config.serverUrl}/api/delete/`+name,{
+            method: 'DELETE',
+          });
+          const json=await response.json();
+          return json;
+    }catch (error)
+    {
+        console.log(error);
+    }
+}      

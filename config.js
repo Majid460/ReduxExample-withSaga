@@ -1,7 +1,7 @@
 export default 
 {   // Local
-   // serverUrl:" ",
+    serverUrl:"",
     //Live 
-  serverUrl: "your server url"
+ //serverUrl: ""
 
 }

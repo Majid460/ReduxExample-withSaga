@@ -1,5 +1,5 @@
 import { put, takeLatest,call } from "redux-saga/effects";
-import { getMovies,getPhotos, getUserByAge, getUserByName, getUserD, getUserRecords } from "../raw/api";
+import { deleteByName, getMovies,getPhotos, getUserByAge, getUserByName, getUserD, getUserRecords } from "../raw/api";
 import * as actions from "./reducer";
 
 function* getMovieList({payload}){
@@ -70,6 +70,18 @@ function* getUserRec({payload})
         }
     }
 }
+function* deleteByNAME({payload})
+{ 
+    const response=yield call(deleteByName,payload.data)
+    console.log(response)
+    if(response)
+    {
+        yield put(actions.getUserData({}));
+    }
+    else{
+        console.log("No data")
+    }
+}
 const isNumber=(n)=> 
  { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
 export default function* () {
@@ -77,5 +89,6 @@ export default function* () {
     yield takeLatest(actions.getPhotos,getPhotosList)
     yield takeLatest(actions.getUserData,getUser)
     yield takeLatest(actions.getUserRecords,getUserRec)
+    yield takeLatest(actions.getDelete,deleteByNAME)
 }
 

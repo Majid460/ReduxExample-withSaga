@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export const userSlice=createSlice({
     name: "user",
     initialState: {
@@ -9,6 +8,7 @@ export const userSlice=createSlice({
       movies:{},
       photos:[],
       userRecords:[],
+      badge:0
     },
     reducers:{
         setUserData: (state, action) => {
@@ -23,10 +23,16 @@ export const userSlice=createSlice({
           setUserRecords:(state,action)=>{
             state.userRecords=action.payload
           },
+          setBadge:(state,action)=>{
+            state.badge=action.payload
+          },
+
           getUserData:(state,action)=>{},
           getMovie:(state,action)=>{},
           getPhotos:(state,action)=>{},
-          getUserRecords:(state,action)=>{}
+          getUserRecords:(state,action)=>{},
+          getDelete:(state,action)=>{},
+         
     }
 });
 export const {
@@ -38,5 +44,7 @@ export const {
   setPhotos,
   getUserData,
   getUserRecords,
+  getDelete,
+  setBadge,
 }=userSlice.actions;
 export default userSlice.reducer;

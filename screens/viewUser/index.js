@@ -1,23 +1,50 @@
-import React,{useState,useEffect} from 'react';
-import {Text,View,TouchableOpacity,TextInput,StyleSheet,FlatList,ActivityIndicator} from 'react-native';
+import React,{useState,useEffect,useCallback} from 'react';
+import {Text,View,TouchableOpacity,TextInput,StyleSheet,FlatList,ActivityIndicator, RefreshControl} from 'react-native';
 import { useDispatch,useSelector } from 'react-redux';
-import { getUserRecords } from '../../redux/reducer';
+import { getDelete, getUserRecords,setBadge } from '../../redux/reducer';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { SearchBar } from 'react-native-screens';
 const ViewUser=({navigation})=>{
   const [data,setData]=useState(null)  
   const [visible,setVisible]=useState(false);
+  const [isRefreshing,setRefreshing]=useState(false)
+  const [badgeCount,setBadgeC]=useState(0)
  const dispatch=useDispatch();
- const {userRecords}=useSelector((state)=>state.user);
+ const {userRecords,badge}=useSelector((state)=>state.user);
  useEffect(()=>{
         dispatch(getUserRecords({}))
- },[]);
-
-
+       
+        if(isRefreshing==true)
+        {
+          wait(3000).then(()=>{
+            setRefreshing(false)
+          })
+        }
+ },[isRefreshing]);
+ useEffect(()=>{
+  const unsubscribe = navigation.addListener('focus', () => {
+    console.log(badge.badgeCount)
+    dispatch(setBadge({badgeCount:0}))
+  });
+  return unsubscribe;
+  
+ },[])
+ const wait = (timeout) => { 
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+ const onRefresh = useCallback(() => {
+  setRefreshing(true);
+  dispatch(getUserRecords({}))
+  wait(3000).then(() => {
+    setRefreshing(false)});
+}, []);
      const search=()=>{
-
+           
             dispatch(getUserRecords({data:data}))
 
+     }
+     const deleteBy=()=>
+     {  setRefreshing(true);
+        dispatch(getDelete({data:data}))
      }
     return(
       <View style={styles.container} >
@@ -36,10 +63,15 @@ const ViewUser=({navigation})=>{
       <TouchableOpacity style={styles.searchBtn} onPress={()=>{search()}}>
       <Icon name="search-outline" size={25} color={'#2382DB'}/>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.searchBtn} onPress={()=>{deleteBy()}}>
+      <Icon name="trash-outline" size={25} color={'#2382DB'}/>
+      </TouchableOpacity>
       </View>
        <FlatList
        data={userRecords}
        keyExtractor={({ id }, index) => id}
+       refreshing={isRefreshing}
+       onRefresh={onRefresh}
        onScroll={()=>{
         setVisible(true)
        }}
@@ -107,6 +139,7 @@ const styles=StyleSheet.create(
     searchBtn:{
         flex:1,
       width:30,
+      paddingStart:10,
       height:30 ,
       alignSelf:'center',
     },
