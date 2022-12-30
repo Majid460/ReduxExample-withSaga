@@ -36,11 +36,9 @@ const ViewUser=({navigation})=>{
   dispatch(getUserRecords({}))
   wait(3000).then(() => {
     setRefreshing(false)});
-}, []);
+   }, []);
      const search=()=>{
-           
             dispatch(getUserRecords({data:data}))
-
      }
      const deleteBy=()=>
      {  setRefreshing(true);
@@ -69,7 +67,9 @@ const ViewUser=({navigation})=>{
       </View>
        <FlatList
        data={userRecords}
-       keyExtractor={({ id }, index) => id}
+       keyExtractor={(item, index) => {
+        return index.toString();
+      }}
        refreshing={isRefreshing}
        onRefresh={onRefresh}
        onScroll={()=>{
@@ -83,19 +83,19 @@ const ViewUser=({navigation})=>{
             <View style={styles.item1} key={index}>
                 <View style={styles.viewA}>
                     <View style={styles.A}>
-                       <Text style={styles.item2}> Name </Text>
+                       <Text  style={styles.item2}> Name </Text>
                     </View>
                     <View style={styles.B}>
-                    <Text style={[styles.item2]}> Age </Text>
+                    <Text  style={[styles.item2]}> Age </Text>
                 </View>
                     
                 </View>
                 <View style={styles.viewA}>
                     <View style={styles.AB}>
-                       <Text key={index} style={styles.item}>{item.name} </Text>
+                       <Text  style={styles.item}>{item.name} </Text>
                     </View>
                     <View style={styles.B}>
-                    <Text key={index} style={styles.item}>{item.age}  </Text>
+                    <Text style={styles.item}>{item.age}  </Text>
                     </View>
                     
                 </View>
@@ -105,9 +105,9 @@ const ViewUser=({navigation})=>{
           )}
 
        />
-         <View style={{flex:1,width:20,height:20,justifyContent:'flex-end',alignSelf:'center',marginBottom:10}}>
+         {/* <View style={{flex:1,width:20,height:20,justifyContent:'flex-end',alignSelf:'center',marginBottom:10}}>
        <ActivityIndicator animating={visible} size="large" color="#0000ff" />
-       </View>
+       </View> */}
       </View>
     );
 }

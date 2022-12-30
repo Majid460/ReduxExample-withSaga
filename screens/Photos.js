@@ -14,7 +14,7 @@ const Photos=()=>{
      <View style={styles.mainCon}>
         <FlatList
        data={photos}
-       keyExtractor={({ id }, index) => id}
+       keyExtractor={({ id }, index) =>{return index.toString()}}
        onScroll={()=>{
         setVisible(true)
        }}

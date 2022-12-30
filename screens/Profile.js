@@ -28,7 +28,7 @@ const Person =()=>{
         <View >
          <FlatList
        data={movies}
-       keyExtractor={({ id }, index) => id}
+       keyExtractor={({ id }, index) => {return index.toString()}}
        renderItem={({ item }) => (
             <View style={styles.item1}>
                 <View style={styles.viewA}>
@@ -91,7 +91,7 @@ const styles=StyleSheet.create(
       item1:
       {
         flex:1,
-      flexDirection:'column',
+       flexDirection:'column',
        borderColor:'#534A4A',
        borderRadius:10,
        paddingHorizontal:10,

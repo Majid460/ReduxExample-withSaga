@@ -6,22 +6,11 @@ import { useInterval } from "react-interval-hook";
 const UserData=({navigation})=>{
     const [name,setName]=useState("");
     const [age,setAge]=useState(0);
+    var number=0;
     const {badge}=useSelector((state)=>state.user)
-    var number=badge.badgeCount
-    const [badgeCount,setBadgeC]=useState(number)
+     number=badge.badgeCount
     const [visible,setVisible]=useState(false);
     const dispatch=useDispatch();
-   
-    useEffect(()=>{
-        const unsubscribe = navigation.addListener('focus', () => {
-            if(number===0)
-            {
-               setBadgeC(0);
-               console.log("Badge State::: "+ badgeCount)
-            }
-          });
-     return unsubscribe;
-    },[])
     const onButtonPress=()=>{
         setVisible(true);
         if(name.length==0 || age==0)
@@ -33,10 +22,9 @@ const UserData=({navigation})=>{
             alert("No empty field is required")
         }
         else if(name.length!=0 && age!=0)
-        {
-            setBadgeC(badgeCount+1);
-            console.log("State Badge Count => "+ badgeCount)
-            dispatch(setBadge({badgeCount:badgeCount}))
+        {  
+            number=number+1
+            dispatch(setBadge({badgeCount:number}))
             dispatch(getUserData({
                 name:name,
                 age:age

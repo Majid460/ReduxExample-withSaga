@@ -14,7 +14,6 @@ const HomeBottomNav=()=>{
     const [isVisible,setVisible]=useState(false)
     const { colors } = useTheme();
     useEffect(()=>{
-        console.log("Badge Value in Tab:"+ JSON.stringify(badge))
       if(badge.badgeCount==0)
       {
         setVisible(false)
@@ -31,7 +30,7 @@ const HomeBottomNav=()=>{
             tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
                 if (route.name === 'Home') {
-                    iconName = focused ? 'home' : 'people-outline';
+                    iconName = focused ? 'home' : 'home-outline';
                 } else if (route.name === 'Photos') {
                     iconName = focused ? 'images' : 'images-outline';
                 }
